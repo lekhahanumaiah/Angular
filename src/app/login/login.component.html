@@ -1,0 +1,68 @@
+<div class="container-fluid vh-100 d-flex align-items-center justify-content-center bg-light">
+  <div class="row w-100">
+    <div class="col-md-6 col-lg-4 mx-auto">
+      <div class="card shadow">
+        <div class="card-body p-4">
+          <div class="text-center mb-4">
+            <h2 class="card-title fw-bold text-primary">Login</h2>
+          </div>
+
+          <!-- REACTIVE FORM -->
+          <form [formGroup]="loginForm" (ngSubmit)="handleLogin()">
+
+            <!-- Email Field -->
+<div class="mb-3">
+  <label for="email" class="form-label">Email Address</label>
+  <input
+    type="email"
+    class="form-control"
+    id="email"
+    placeholder="Enter your email"
+    formControlName="email"
+  />
+  <div *ngIf="f['email'].touched && f['email'].invalid" class="text-danger mt-1">
+    <div *ngIf="f['email'].errors?.['required']">Email is required</div>
+    <div *ngIf="f['email'].errors?.['email']">Invalid email format</div>
+  </div>
+</div>
+
+<!-- Password Field -->
+<div class="mb-3">
+  <label for="password" class="form-label">Password</label>
+  <input
+    type="password"
+    class="form-control"
+    id="password"
+    placeholder="Enter your password"
+    formControlName="password"
+  />
+  <div *ngIf="f['password'].touched && f['password'].invalid" class="text-danger mt-1">
+    <div *ngIf="f['password'].errors?.['required']">Password is required</div>
+    <div *ngIf="f['password'].errors?.['minlength']">
+      Password must be at least 6 characters
+    </div>
+    <div *ngIf="f['password'].errors?.['pattern']">
+      Password must start with a capital letter and contain at least one special character
+    </div>
+  </div>
+</div>
+
+
+
+            <!-- Submit Button -->
+            <div class="d-grid mb-3">
+              <button
+                type="submit"
+                class="btn btn-primary btn-lg"
+                [disabled]="loginForm.invalid"
+              >
+                Login
+              </button>
+            </div>
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
