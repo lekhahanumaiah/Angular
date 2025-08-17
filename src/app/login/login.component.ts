@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';  // ⬅️ we’ll create this
 
 @Component({
   selector: 'app-login-page',
@@ -8,11 +9,15 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  email: string = '';
-  password: string = '';
   loginForm!: FormGroup;
+  submitted = false;
+  errorMessage: string = '';
 
-  constructor(private fb: FormBuilder, private router: Router) {}
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
@@ -22,23 +27,35 @@ export class LoginComponent implements OnInit {
         [
           Validators.required,
           Validators.minLength(6),
-          Validators.pattern(/^[A-Z][\w!@#$%^&*()\-_=+{}[\]:;"'<>,.?/\\|`~]*[!@#$%^&*()\-_=+{}[\]:;"'<>,.?/\\|`~]+[\w!@#$%^&*()\-_=+{}[\]:;"'<>,.?/\\|`~]*$/)
+          Validators.pattern(/^[A-Z].*[!@#$%^&*(),.?":{}|<>]+.*$/)
         ]
       ]
     });
   }
 
-  handleLogin() {
-    if (this.loginForm.valid) {
-      const { email, password } = this.loginForm.value;
-      // Implement actual login logic here
-      this.router.navigate(['/home']);
-    } else {
-      this.loginForm.markAllAsTouched();
-    }
-  }
-
   get f() {
     return this.loginForm.controls;
+  }
+
+  handleLogin() {
+    this.submitted = true;
+
+    if (this.loginForm.invalid) {
+      return;
+    }
+
+    const { email, password } = this.loginForm.value;
+
+    // Call backend login API
+    this.authService.login(email, password).subscribe({
+      next: (res: { token: string }) => {
+        localStorage.setItem('token', res.token);
+        this.router.navigate(['/']);
+      },
+      error: (err: any) => {
+        this.errorMessage = err.error?.message || 'Invalid email or password';
+      }
+    });
+    
   }
 }

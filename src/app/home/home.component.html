@@ -1,5 +1,27 @@
-<div class="container">
-  <header class="jumbotron">
-    <p>{{ content }}</p>
-  </header>
+<div class="container mt-4">
+  <!-- 🔹 Top Navbar with Login Button -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Welcome to Our Store</h2>
+    <button class="btn btn-primary" (click)="goToLogin()">Login</button>
+  </div>
+
+  <!-- 🔹 Search Bar -->
+  <form [formGroup]="searchForm" class="mb-4">
+    <input
+      type="text"
+      class="form-control"
+      placeholder="Search products..."
+      formControlName="search"
+    />
+  </form>
+
+  <!-- 🔹 Product Cards -->
+  <div class="row">
+    <div
+      class="col-md-4 mb-3"
+      *ngFor="let product of filteredProducts"
+    >
+      <app-card [product]="product"></app-card>
+    </div>
+  </div>
 </div>
