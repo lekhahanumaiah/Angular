@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../services/auth.service';  // ⬅️ we’ll create this
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-login-page',
@@ -33,6 +33,7 @@ export class LoginComponent implements OnInit {
     });
   }
 
+  // easy getter for form fields
   get f() {
     return this.loginForm.controls;
   }
@@ -46,16 +47,16 @@ export class LoginComponent implements OnInit {
 
     const { email, password } = this.loginForm.value;
 
-    // Call backend login API
     this.authService.login(email, password).subscribe({
       next: (res: { token: string }) => {
+        // Save JWT token
         localStorage.setItem('token', res.token);
-        this.router.navigate(['/']);
+        // Navigate to home page
+        this.router.navigate(['/home']);
       },
       error: (err: any) => {
         this.errorMessage = err.error?.message || 'Invalid email or password';
       }
     });
-    
   }
 }

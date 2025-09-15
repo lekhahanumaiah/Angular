@@ -1,8 +1,10 @@
-<div class="card">
-  <img [src]="product.imageUrl" alt="{{ product.name }}" />  
+<div class="card h-100" [routerLink]="['/product', product.id]" style="cursor: pointer;">
+  <img [src]="product.imageUrl" class="card-img-top" alt="{{ product.name }}" />
   <div class="card-body">
-    <h5>{{ product.name }}</h5>
-    <p>{{ product.description }}</p>
-    <p><strong>₹{{ product.price }}</strong></p>
+  <h5 class="card-title">{{ product.name}}</h5>
+  <p class="card-text">{{ product.description }}</p>
+  <p><strong>₹{{ product.price }}</strong></p>
+  <span class="badge bg-secondary">{{ product.category }}</span>
   </div>
-</div>
+  </div>
+ 
